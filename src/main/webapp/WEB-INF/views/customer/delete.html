@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:object="${customer}" method="post">
+    <p th:text="*{id}"></p>
+    <p th:text="*{firstName}"></p>
+    <p th:text="*{lastName}"></p>
+    <p><img th:src="'/img/' + *{avatar}" alt=""></p>
+    <button>Yes</button>
+    <a href="/customer">No</a>
+</form>
+</body>
+</html>
