@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -35,6 +34,9 @@ import java.util.Properties;
 @EnableWebMvc
 @ComponentScan("com.customer")
 @EnableTransactionManagement
+@EnableJpaRepositories("com")
+@EnableSpringDataWebSupport
+@EnableAspectJAutoProxy
 @PropertySource("classpath:upload_file.properties")
 public class ApplicationConfig implements WebMvcConfigurer, ApplicationContextAware {
     @Value("${upload-file}")

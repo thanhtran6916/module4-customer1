@@ -3,6 +3,7 @@ package com.customer.controller;
 import com.customer.model.customer.Customer;
 import com.customer.model.customer.CustomerForm;
 import com.customer.service.customer.ICustomerService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/customer")
@@ -29,7 +32,8 @@ public class CustomerController {
     @GetMapping("")
     public ModelAndView showList() {
         ModelAndView modelAndView = new ModelAndView("/customer/list");
-        modelAndView.addObject("customers", customerService.getAll());
+        List<Customer> customers = (List<Customer>) customerService.getAll();
+        modelAndView.addObject("customers", customers);
         return modelAndView;
     }
 
@@ -57,10 +61,10 @@ public class CustomerController {
     }
 
     @GetMapping("/edit/{id}")
-    public ModelAndView showCreate(@PathVariable("id") Long id) {
-        Customer customer = customerService.getById(id);
+    public ModelAndView showCreate(@PathVariable("id") Long id) throws Exception {
+        Optional<Customer> customer = customerService.getById(id);
         ModelAndView modelAndView = new ModelAndView("/customer/edit");
-        modelAndView.addObject("customer", customer);
+        modelAndView.addObject("customer", customer.get());
         return modelAndView;
     }
 
@@ -71,8 +75,8 @@ public class CustomerController {
     }
 
     @GetMapping("/info/{id}")
-    public ModelAndView showInfo(@PathVariable("id") Long id) {
-        Customer customer = customerService.getById(id);
+    public ModelAndView showInfo(@PathVariable("id") Long id) throws Exception {
+        Optional<Customer> customer = customerService.getById(id);
         ModelAndView modelAndView = null;
         if (customer == null) {
             modelAndView = new ModelAndView("404");
@@ -84,13 +88,13 @@ public class CustomerController {
     }
 
     @GetMapping("/delete/{id}")
-    public ModelAndView showDelete(@PathVariable("id") Long id) {
+    public ModelAndView showDelete(@PathVariable("id") Long id) throws Exception {
         ModelAndView modelAndView = new ModelAndView("customer/delete");
-        Customer customer = customerService.getById(id);
+        Optional<Customer> customer = customerService.getById(id);
         if (customer == null) {
             modelAndView = new ModelAndView("404");
         } else {
-            modelAndView.addObject("customer", customer);
+            modelAndView.addObject("customer", customer.get());
         }
         return modelAndView;
     }
@@ -100,5 +104,7 @@ public class CustomerController {
         customerService.delete(id);
         return "redirect:/customer";
     }
+
+
 
 }
